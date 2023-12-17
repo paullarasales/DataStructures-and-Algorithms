@@ -56,18 +56,16 @@ const sentence = "Find the longest word in this sentence";
 const longestWord = findTheLongest(sentence);
 console.log(longestWord);
 
-// arranged the order
+// Bubble Sort Algorithm
+function bubbleSortAlgorithm(arr) {
 
-function arrangeBySize(arr) {
-
-    const n = arr.length;
-
-    for (let i = 0; i < n - 1; i++ ) {
-        for (let j = 0; j < n - i - 1; j++) {
+    for (let i = 0; i < arr.length - 1; i++ ) {
+        for (let j = 0; j < arr.length - i - 1; j++) {
             if (arr[j] > arr[j + 1]) {
                 let temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
+                console.log(arr);
             }
         } 
     }
@@ -75,6 +73,6 @@ function arrangeBySize(arr) {
     return arr;
 }
 
-let arrayNums = [5, 7, 9, 2, 6];
-let sortedNums = arrangeBySize(arrayNums);
+let arrayNums = [5, 7, 9, 2, 6, 8];
+let sortedNums = bubbleSortAlgorithm(arrayNums);
 console.log(sortedNums);
