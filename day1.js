@@ -35,3 +35,23 @@ function isPalindrome(string) {
 
 let check = "racecar";
 console.log(isPalindrome(check));
+
+//finds the longest word
+
+function findTheLongest(sentence) {
+    const wordsArray = sentence.split(' ');
+
+    let longestWord = '';
+
+    for (const word of wordsArray) {
+        if (word.length > longestWord.length) {
+            longestWord = word;
+        }
+    }
+
+    return longestWord;
+}
+
+const sentence = "Find the longest word in this sentence";
+const longestWord = findTheLongest(sentence);
+console.log(longestWord);
