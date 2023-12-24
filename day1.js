@@ -76,3 +76,6 @@ function bubbleSortAlgorithm(arr) {
 let arrayNums = [5, 7, 9, 2, 6, 8];
 let sortedNums = bubbleSortAlgorithm(arrayNums);
 console.log(sortedNums);
+
+console.log("The Fuck I Made It");
+console.log("Hello World");
