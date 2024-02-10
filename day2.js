@@ -1,6 +1,7 @@
 //day 2 of learning datastructures and algorithms
 
 function twoSum(nums, target) {
+
   //declare an empty object
   const numIndeces = {
 
