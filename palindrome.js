@@ -1,18 +1,13 @@
 function palindrome(str) {
-  let palindrome = [];
-  for(let i = str.length - 1; i >= 0; i--) {
-    palindrome.push(str[i]);
+  let len = str.length; 
+
+  for (let i = 0; i < len/2; i++) {
+    if (str[i] !== str[len - 1 - i]) {
+      return false;
+    }
   }
-
-  let result = palindrome.join("");
-
-  if (result === str) {
-    return true;
-  }
-
-  return false;
+  return true;
 }
 
-let message = "racecayr";
-
+let message = "racecar";
 console.log(palindrome(message));
