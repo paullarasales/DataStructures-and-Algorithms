@@ -10,4 +10,22 @@ function twoSum(target, nums) {
     }
 }
 
+function faster(target, nums) {
+    const numberToIndex = {};
+
+    for (let i = 0; i < nums.length; i++) {
+        numberToIndex[nums[i]] = i;
+    }
+    
+    for (let i = 0; i < nums.length; i++) {
+        const numberNeeded = target - nums[i];
+
+        if (numberToIndex[numberNeeded] !== undefined && numberToIndex[numberNeeded] !== i) {
+            return [i, numberToIndex[numberNeeded]];
+        }
+    }
+}
+
+console.log(faster(9, nums));
+
 console.log(twoSum(9, nums));
