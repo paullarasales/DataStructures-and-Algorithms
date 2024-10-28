@@ -1,12 +1,4 @@
-function isLegal(age) {
-  if (age <= 2005){
-    console.log("Legal Age");
-  } else if (age >= 2006){
-    console.log("Minor");
-  } else {
-    print("------")
-  }
-}
+const myModule = require("./module");
 
-console.log(isLegal(2002));
-console.log(isLegal(2009));
+const test = myModule.isLegal(2003);
+console.log(test);
