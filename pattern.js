@@ -1,7 +1,11 @@
 function pattern(num) {
-  for (let i = 0; i <= num; i++) {
-    console.log(num[i]);
+  for (let i = 1; i <= num; i++) {
+    let row = "";
+    for (let j = 1; j <= i; j++) {
+      row += j + " ";
+    }
+    console.log(row.trim());
   }
 }
 
-console.log(pattern(4));
+pattern(4);
