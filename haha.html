@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Whack-A-Mole</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            background: #87CEEB;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background: #8B4513;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .hole {
+            width: 80px;
+            height: 80px;
+            background: #3E2723;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .mole {
+            width: 60px;
+            height: 60px;
+            background: #8D6E63;
+            border-radius: 50% 50% 25% 25%;
+            position: absolute;
+            bottom: -60px;
+            transition: bottom 0.1s;
+        }
+
+        .mole.up {
+            bottom: 0;
+        }
+
+        .mole::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            width: 12px;
+            height: 12px;
+            background: black;
+            border-radius: 50%;
+            box-shadow: 28px 0 0 black;
+        }
+
+        .mole::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 25px;
+            width: 10px;
+            height: 5px;
+            background: black;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .mole.bonked {
+            transform: scale(0.9);
+            background: #6D4C41;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .game-over {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Whack-A-Mole!</h1>
+    <div class="stats">
+        <div class="stat-box">Score: <span id="score">0</span></div>
+        <div class="stat-box">Time: <span id="time">30</span>s</div>
+    </div>
+    <div class="grid">
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+        <div class="hole"><div class="mole"></div></div>
+    </div>
+    <button id="startButton">Start Game</button>
+    <div class="game-over">
+        <h2>Game Over!</h2>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <button id="restartButton">Play Again</button>
+    </div>
+
+    <script>
+        const holes = document.querySelectorAll('.hole');
+        const moles = document.querySelectorAll('.mole');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const startButton = document.getElementById('startButton');
+        const restartButton = document.getElementById('restartButton');
+        const gameOverScreen = document.querySelector('.game-over');
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval;
+        let currentMole = null;
+        let isPlaying = false;
+
+        function randomTime(min, max) {
+            return Math.round(Math.random() * (max - min) + min);
+        }
+
+        function randomHole() {
+            const index = Math.floor(Math.random() * holes.length);
+            const hole = holes[index];
+            if (hole === currentMole) {
+                return randomHole();
+            }
+            currentMole = hole;
+            return hole;
+        }
+
+        function peep() {
+            const time = randomTime(600, 1200);
+            const hole = randomHole();
+            const mole = hole.querySelector('.mole');
+            mole.classList.add('up');
+            
+            setTimeout(() => {
+                mole.classList.remove('up');
+                if (isPlaying) peep();
+            }, time);
+        }
+
+        function startGame() {
+            if (isPlaying) return;
+            score = 0;
+            timeLeft = 30;
+            isPlaying = true;
+            scoreDisplay.textContent = score;
+            timeDisplay.textContent = timeLeft;
+            gameOverScreen.style.display = 'none';
+            startButton.style.display = 'none';
+            
+            peep();
+            
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(gameInterval);
+            moles.forEach(mole => mole.classList.remove('up'));
+            document.getElementById('finalScore').textContent = score;
+            gameOverScreen.style.display = 'block';
+            startButton.style.display = 'block';
+        }
+
+        function whack(e) {
+            if (!isPlaying) return;
+            if (e.isTrusted && e.target.classList.contains('mole') && e.target.classList.contains('up')) {
+                score++;
+                e.target.classList.remove('up');
+                e.target.classList.add('bonked');
+                setTimeout(() => e.target.classList.remove('bonked'), 100);
+                scoreDisplay.textContent = score;
+            }
+        }
+
+        moles.forEach(mole => mole.addEventListener('click', whack));
+        startButton.addEventListener('click', startGame);
+        restartButton.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
